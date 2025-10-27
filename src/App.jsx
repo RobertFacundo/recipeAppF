@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useState } from 'react';
+import AuthModal from './components/AuthModal.jsx';
+import useRecipeSearch from './hooks/recipeHooks';
+import NavHeader from './components/NavHeader.jsx';
+import RecipeAppView from './components/RecipeAppView.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const hookProps = useRecipeSearch();
+
+  const { isAuthenticated, handleLogin,handleRegister,fetchFavorites, handleLogout, goToSearch } = hookProps;
+
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const openAuthModal = () => setShowAuthModal(true);
+  const closeAuthModal = () => setShowAuthModal(false);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Hola mundo</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="bg-gray-50 min-h-screen font-sans">
+      <NavHeader
+        isAuthenticated={isAuthenticated}
+        onLogin={openAuthModal}
+        onLogout={handleLogout}
+        goToSearch={goToSearch}
+        goToFavorites={fetchFavorites}
+      />
+      <main>
+        <RecipeAppView {...hookProps} />
+      </main>
+
+      {showAuthModal && (
+        <AuthModal
+          mode='login'
+          handleLogin={async (data) => {
+            await handleLogin(data);
+            setShowAuthModal(false);
+          }}
+
+          handleRegister={async (data) => {
+            const success = await handleRegister(data);
+            if (success) setShowAuthModal(false);
+          }}
+        />
+      )}
+    </div>
   )
 }
 

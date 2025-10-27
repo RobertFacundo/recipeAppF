@@ -1,5 +1,4 @@
 import api from '../config/axiosConfig.js';
-import axios from 'axios';
 
 export const authToken = (token) => {
     if (token) {
@@ -9,6 +8,28 @@ export const authToken = (token) => {
     }
 };
 
+export const registerUser = async (userData) => {
+    try {
+        const response = await api.post('/auth/signup', userData);
+        console.log(response, 'LOG DEL REGISTERUSER!!!!')
+        return response.data;
+    } catch (error) {
+        console.error('Error registerin user', error.response?.data?.message || error.message);
+        throw error;
+    }
+};
+
+export const loginUser = async (credentials) => {
+    try {
+        const response = await api.post('/auth/login', credentials);
+        console.log(response, 'LOG DEL LOGIN USER!!!')
+        return response.data;
+    } catch (error) {
+        console.error('Error while login', error);
+        throw error;
+    }
+}
+
 export const searchRecipes = async (ingredientsArray) => {
     try {
         const ingredientsQuery = ingredientsArray.join(',');
@@ -17,6 +38,8 @@ export const searchRecipes = async (ingredientsArray) => {
                 ingredients: ingredientsQuery
             }
         });
+
+        return response.data
     } catch (error) {
         console.error('Error searching recipes:', error);
         throw error
@@ -27,6 +50,7 @@ export const searchRecipes = async (ingredientsArray) => {
 export const getRecipeDetails = async (recipeId) => {
     try {
         const response = await api.get(`/external/${recipeId}`);
+        console.log(response, 'LOG DEL RECIPEDEATILS!!')
         return response.data;
     } catch (error) {
         console.error(`Error al obtener detalles de la receta ${recipeId}:`, error);
@@ -38,12 +62,25 @@ export const getRecipeDetails = async (recipeId) => {
 export const saveFavorite = async (recipeData) => {
     try {
         const response = await api.post('/recipes', recipeData);
+        console.log(response, 'LOG DEL SAVE FAVORITE')
         return response.data;
     } catch (error) {
         console.error('Error al guardar favorito:', error);
         throw error;
     }
 };
+
+export const getFavsRecipes = async () => {
+    try {
+        const response = await api.get('/recipes');
+        console.log(response, 'LOG DEL FAVS RECIPES');
+        return response.data
+    } catch (error) {
+        console.error('Error gettin favs recipes', error);
+        throw error;
+        
+    }
+}
 
 export const checkIfSaved = async (externalId) => {
     try {
