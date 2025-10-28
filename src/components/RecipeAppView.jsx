@@ -4,17 +4,13 @@ import ResultsComponent from './ResultsComponent.jsx';
 import RecipeDetailsComponent from './RecipeDetailsComponent.jsx';
 import LoadingScreen from './LoadingScreen.jsx';
 import FavoritesComponent from './FavoritesComponent.jsx';
+import { useNavigationContext } from "../contexts/NavigationContext.jsx";
+import { useRecipesContext } from "../contexts/RecipesContext.jsx";
 
 
-const RecipeAppView = (props) => {
-    const {
-        currentView,
-        isLoading,
-        recipes,
-        selectedRecipe,
-        error,
-        allIngredients
-    } = props;
+const RecipeAppView = () => {
+    const { currentView } = useNavigationContext();
+    const { isLoading } = useRecipesContext();
 
 
     if (isLoading) {
@@ -24,51 +20,24 @@ const RecipeAppView = (props) => {
     switch (currentView) {
         case 'search':
             return (
-                <SearchComponent
-                    allIngredients={allIngredients}
-                    selectedIngredients={props.selectedIngredients}
-                    toggleIngredient={props.toggleIngredient}
-                    handleSearch={props.handleSearch}
-                    error={error}
-                    isLoading={isLoading}
-                />
+                <SearchComponent />
             );
         case 'results':
             return (
-                <ResultsComponent
-                    recipes={recipes}
-                    handleRecipeClick={props.handleRecipeClick}
-                    goToSearch={props.goToSearch}
-                />
+                <ResultsComponent />
             );
         case 'details':
             return (
-                <RecipeDetailsComponent
-                    recipe={selectedRecipe}
-                    handleSaveFavorite={props.handleSaveFavorite}
-                    goToResults={props.goToResults}
-                    checkIfSaved={props.checkIfSaved}
-                    isAuthenticated={props.isAuthenticated}
-                />
+                <RecipeDetailsComponent />
             );
 
         case 'favorites':
             return (
-                <FavoritesComponent
-                    recipes={props.favorites}
-                    handleRecipeClick={props.handleRecipeClick}
-                />
+                <FavoritesComponent />
             );
         default:
             return (
-                <SearchComponent
-                    allIngredients={allIngredients}
-                    selectedIngredients={props.selectedIngredients}
-                    toggleIngredient={props.toggleIngredient}
-                    handleSearch={props.handleSearch}
-                    error={error}
-                    isLoading={isLoading}
-                />
+                <SearchComponent />
             )
     }
 };

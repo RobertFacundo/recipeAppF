@@ -1,12 +1,10 @@
-import React from "react";
+import { useNavigationContext } from "../contexts/NavigationContext";
+import { useAuthContext } from "../contexts/AuthContext";
 
-const NavHeader = ({
-    isAuthenticated,
-    onLogin,
-    onLogout,
-    goToSearch,
-    goToFavorites
-}) => {
+const NavHeader = ({ openAuthModal }) => {
+    const { isAuthenticated, handleLogout } = useAuthContext();
+    const { goToFavorites, goToSearch } = useNavigationContext();
+
     return (
         <header className="bg-white sticky top-0 z-10">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -35,14 +33,14 @@ const NavHeader = ({
 
                     {isAuthenticated ? (
                         <button
-                            onClick={onLogout}
+                            onClick={handleLogout}
                             className="px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition duration-200 shadow-sm cursor-pointer"
                         >
                             Logout
                         </button>
                     ) : (
                         <button
-                            onClick={onLogin}
+                            onClick={openAuthModal}
                             className="px-4 py-2 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition duration-200 shadow-md cursor-pointer"
                         >
                             Login / Sign Up

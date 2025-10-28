@@ -1,39 +1,7 @@
-import React, {useState} from "react"
+import useAuthForm from "../hooks/useAuthForm";
 
-const AuthModal = ({ mode = 'login', handleLogin, handleRegister }) => {
-    const [formMode, setFormMode] = useState(mode);
-    const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [isSubmitting, setIsSubmitting] = useState(null);
-
-    const toggleMode = () => {
-        setFormMode((prev) => (prev === 'login' ? 'register' : 'login'));
-        setErrorMessage(null);
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessage(null);
-        setIsSubmitting(true);
-
-        try {
-            if (formMode === 'login') {
-                await handleLogin({ email: formData.email, password: formData.password });
-            } else {
-                const success = await handleRegister(formData);
-                if (!success) throw new Error('Registration failed');
-            }
-        } catch (error) {
-            setErrorMessage("Invalid credentials or server error.");
-        } finally {
-            setIsSubmitting(false)
-        }
-    };
+const AuthModal = ({ closeModal }) => {
+    const { formMode, formData, errorMessage, isSubmitting, toggleMode, handleChange, handleSubmit } = useAuthForm(closeModal);
 
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -91,7 +59,7 @@ const AuthModal = ({ mode = 'login', handleLogin, handleRegister }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition disabled:opacity-60"
+                        className="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition disabled:opacity-60"
                     >
                         {isSubmitting
                             ? "Processing..."
@@ -105,7 +73,7 @@ const AuthModal = ({ mode = 'login', handleLogin, handleRegister }) => {
                     <button
                         type="button"
                         onClick={toggleMode}
-                        className="text-indigo-600 hover:underline text-sm"
+                        className="text-orange-600 hover:underline text-sm"
                     >
                         {formMode === "login"
                             ? "Don't have an account? Register"

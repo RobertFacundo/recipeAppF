@@ -1,37 +1,14 @@
 import React from "react";
+import useIngredients from "../hooks/useIngredients";
+import IngredientTag from './searchSubComponents/IngredientTag'
+import { useRecipesContext } from "../contexts/RecipesContext";
 
-const SearchComponent = ({
-    allIngredients,
-    selectedIngredients,
-    toggleIngredient,
-    handleSearch,
-    error,
-    isLoading
-}) => {
-    const renderIngredientTag = (ingredient) => {
-        const isSelected = selectedIngredients.includes(ingredient.name);
-        let baseClasses = 'flex items-center px-4 py-2 rounded-full cursor-pointer transition duration-200 shadow-sm text-white-800 border-2';
-
-        if (isSelected) {
-            baseClasses += ' bg-orange-500 text-white border-orange-600 hover:bg-orange-600';
-        } else {
-            baseClasses += ' bg-white border-orange-200 hover:bg-orange-50';
-        }
-
-        return (
-            <button
-                key={ingredient.name}
-                className={baseClasses}
-                onClick={() => toggleIngredient(ingredient.name)}
-            >
-                <span className="text-lg mr-2">{ingredient.emoji}</span>
-                <span className="font-medium">{ingredient.name}</span>
-            </button>
-        );
-    };
+const SearchComponent = () => {
+    const { allIngredients, selectedIngredients, toggleIngredient } = useIngredients();
+    const { handleSearch, isLoading, error } = useRecipesContext();
 
     const handleSearchClick = () => {
-        handleSearch();
+        handleSearch(selectedIngredients);
     }
 
     return (
@@ -40,15 +17,22 @@ const SearchComponent = ({
 
             {error && <p className="bg-red-100 text-red-700 p-3 rounded mb-4 border border-red-400">{error}</p>}
 
-            <div className="flex flex-wrap gap-3 mb-6">
-                {allIngredients.map(renderIngredientTag)}
+            <div className="flex flex-wrap gap-3 mb-6 justify-center">
+                {allIngredients.map(ingredient => (
+                    <IngredientTag
+                        key={ingredient.name}
+                        ingredient={ingredient}
+                        isSelected={selectedIngredients.includes(ingredient.name)}
+                        toggleIngredient={toggleIngredient}
+                    />
+                ))}
             </div>
 
             <div className="flex justify-center items-center pt-4 border-t border-orange-300">
                 <button
                     className={`px-8 py-3 text-lg font-bold rounded-lg transition duration-200 shadow-lg 
                         ${selectedIngredients.length === 0 || isLoading
-                            ? 'bg-gray-300 text-gray-600 cursor-not-allowed shadow-none'
+                            ? 'bg-gray-100 text-gray-600 cursor-not-allowed shadow-none'
                             : 'bg-orange-500 text-white hover:bg-orange-600 active:bg-orange-700'
                         }`
                     }

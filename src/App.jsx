@@ -1,15 +1,11 @@
 import './App.css'
 import { useState } from 'react';
 import AuthModal from './components/AuthModal.jsx';
-import useRecipeSearch from './hooks/recipeHooks';
 import NavHeader from './components/NavHeader.jsx';
 import RecipeAppView from './components/RecipeAppView.jsx';
+import Footer from './components/Footer.jsx';
 
 function App() {
-  const hookProps = useRecipeSearch();
-
-  const { isAuthenticated, handleLogin,handleRegister,fetchFavorites, handleLogout, goToSearch } = hookProps;
-
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const openAuthModal = () => setShowAuthModal(true);
@@ -18,30 +14,18 @@ function App() {
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
       <NavHeader
-        isAuthenticated={isAuthenticated}
-        onLogin={openAuthModal}
-        onLogout={handleLogout}
-        goToSearch={goToSearch}
-        goToFavorites={fetchFavorites}
+        openAuthModal={openAuthModal}
       />
       <main>
-        <RecipeAppView {...hookProps} />
+        <RecipeAppView />
       </main>
 
       {showAuthModal && (
         <AuthModal
-          mode='login'
-          handleLogin={async (data) => {
-            await handleLogin(data);
-            setShowAuthModal(false);
-          }}
-
-          handleRegister={async (data) => {
-            const success = await handleRegister(data);
-            if (success) setShowAuthModal(false);
-          }}
+          closeModal={closeAuthModal}
         />
       )}
+      <Footer />
     </div>
   )
 }
