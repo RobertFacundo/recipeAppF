@@ -4,13 +4,11 @@ import { useNavigationContext } from "../contexts/NavigationContext";
 import { useRecipesContext } from "../contexts/RecipesContext";
 
 const FavoritesComponent = () => {
-    const { favorites, fetchFavorites, isLoading } = useFavorites();
+    const { favorites, isLoading } = useFavorites();
     const { handleRecipeClick } = useRecipesContext();
     const { goToSearch } = useNavigationContext();
 
-    useEffect(() => {
-        fetchFavorites();
-    }, [fetchFavorites])
+    console.log(favorites, 'LOG DEL COMPONENTE FAVORITES!!!')
 
     if (isLoading) {
         return <p className="text-center mt-10">Loading favorites...</p>

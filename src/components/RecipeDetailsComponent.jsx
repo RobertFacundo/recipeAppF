@@ -10,10 +10,8 @@ import { useAuthContext } from '../contexts/AuthContext';
 const RecipeDetailsComponent = () => {
     const { selectedRecipe } = useRecipesContext();
     const { goToResults } = useNavigationContext();
-    const { handleSaveFavorite } = useFavorites();
+    const { handleSaveFavorite, isSaved, error } = useFavorites(selectedRecipe);
     const { isAuthenticated } = useAuthContext();
-
-    console.log(selectedRecipe, 'LOG DEL RECIPEDETAILS!!!');
 
     if (!selectedRecipe) {
         return (
@@ -69,6 +67,8 @@ const RecipeDetailsComponent = () => {
                             title={selectedRecipe.title}
                             handleSaveFavorite={() => handleSaveFavorite(selectedRecipe)}
                             isAuthenticated={isAuthenticated}
+                            isSaved={isSaved}
+                            error={error}
                         />
                     </div>
                 </div>
