@@ -41,8 +41,10 @@ export const searchRecipes = async (ingredientsArray) => {
 
         return response.data
     } catch (error) {
-        console.error('Error searching recipes:', error);
-        throw error
+        if (error.response?.data) {
+            throw new Error(`${error.response.data.message}: ${error.response.data.details || ''}`);
+        }
+        throw error;
     }
 };
 
@@ -78,7 +80,7 @@ export const getFavsRecipes = async () => {
     } catch (error) {
         console.error('Error gettin favs recipes', error);
         throw error;
-        
+
     }
 }
 

@@ -15,7 +15,12 @@ const SearchComponent = () => {
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b border-orange-300 pb-3">Select the ingredients that you have</h2>
 
-            {error && <p className="bg-red-100 text-red-700 p-3 rounded mb-4 border border-red-400">{error}</p>}
+            {error && (
+                <p className="bg-red-100 text-red-700 p-3 rounded mb-4 border border-red-400">
+                    {error} <br />
+                    <span className="text-gray-600 text-sm">*This error comes from the external Spoonacular API.</span>
+                </p>
+            )}
 
             <div className="flex flex-wrap gap-3 mb-6 justify-center">
                 {allIngredients.map(ingredient => (

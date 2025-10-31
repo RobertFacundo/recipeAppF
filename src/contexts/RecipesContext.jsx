@@ -28,7 +28,7 @@ export const RecipesProvider = ({ children }) => {
             setRecipes(data.recipes || data);
         } catch (err) {
             console.error(err);
-            setError("Could not connect to the API server");
+            setError(err.message || "Could not connect to the API server");
             setRecipes([]);
         } finally {
             setIsLoading(false);
